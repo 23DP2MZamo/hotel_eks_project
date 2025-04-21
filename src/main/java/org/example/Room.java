@@ -2,45 +2,81 @@ package org.example;
 
 public class Room {
 
-        private int id;
-        private int floor;
-        private RoomType type;
-        private int beds;
-        private RoomStatus status;
-        private float price;
+    private int id;
+    private int floor;
+    private RoomType type;
+    private int beds;
+    private RoomStatus status;
+    private float price;
+
+    public enum RoomType {
+        SINGLE,
+        DUO,
+        LUX,
+        PRESIDENT
+    }
+
+    public enum RoomStatus {
+        AVAILABLE, BOOKED
+    }
+
+    private String guestName; // Добавлено
+
+    public Room(int id, int floor, RoomType type, int beds, RoomStatus status, float price, String guestName) {
+        this.id = id;
+        this.floor = floor;
+        this.type = type;
+        this.beds = beds;
+        this.status = status;
+        this.price = price;
+        this.guestName = guestName;
+    }
+
+    public String getGuestName() {
+        return guestName;
+    }
+
+    public void setGuestName(String guestName) {
+        this.guestName = guestName;
+    }
 
     public int getId() {
         return id;
     }
-    public Object getFloor() {
-        return null;
+
+    public int getFloor() {
+        return floor;
     }
 
-    public Object getType() {
+    public RoomType getType() {
+        return type;
     }
 
-    public Object getBeds() {
+    public int getBeds() {
+        return beds;
     }
 
-    public Object getStatus() {
+    public RoomStatus getStatus() {
+        return status;
     }
 
-    public Object getPrice() {
+    public float getPrice() {
+        return price;
     }
 
-    public enum RoomType {
-            SINGLE, DOUBLE, SUITE
-        }
-        public enum RoomStatus {
-            AVAILABLE, BOOKED
-        }
+    public void setStatus(RoomStatus status) {
+        this.status = status;
+    }
 
-        public Room(int id, int floor, RoomType type, int beds, RoomStatus status, float price) {
-            this.id = id;
-            this.floor = floor;
-            this.type = type;
-            this.beds = beds;
-            this.status = status;
-            this.price = price;
-        }
+    @Override
+    public String toString() {
+            String description = switch (type) {
+                case SINGLE -> "Breakfast included.";
+                case DUO -> "Breakfast and dinner included.";
+                case LUX -> "Access to the sauna and swimming pools.";
+                case PRESIDENT -> "Access to sauna and pools.Cleaning, 3 meals a day, sauna, pool, highest room.";
+            };
+        return description;
+    }
+
     }

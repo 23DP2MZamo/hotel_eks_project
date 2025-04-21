@@ -11,7 +11,7 @@ public class DatabaseManager {
                 writer.write("id,floor,type,beds,status,price");
                 writer.newLine();
             } catch (IOException e) {
-                System.err.println("Ошибка создания CSV: " + e.getMessage());
+                System.err.println("Error while creating CSV: " + e.getMessage());
             }
         }
     }
@@ -29,26 +29,29 @@ public class DatabaseManager {
                         Room.RoomType.valueOf(parts[2].toUpperCase()),
                         Integer.parseInt(parts[3]),
                         Room.RoomStatus.valueOf(parts[4].toUpperCase()),
-                        Float.parseFloat(parts[5])
+                        Float.parseFloat(parts[5]),
+                        parts.length > 6 ? parts[6] : ""
                 );
                 rooms.add(room);
             }
         } catch (IOException e) {
-            System.err.println("Ошибка чтения файла: " + e.getMessage());
+            System.err.println("Error reading file: " + e.getMessage());
         }
         return rooms;
     }
 
     public void updateRooms(List<Room> rooms) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
-            writer.write("id,floor,type,beds,status,price\n");
+            writer.write("id,floor,type,beds,status,price,guestName\n");
             for (Room room : rooms) {
-                writer.write(String.format("%d,%d,%s,%d,%s,%.2f\n",
+                writer.write(String.format("%d,%d,%s,%d,%s,%.2f,%s\n",
                         room.getId(), room.getFloor(), room.getType(),
-                        room.getBeds(), room.getStatus(), room.getPrice()));
+                        room.getBeds(), room.getStatus(), room.getPrice(),
+                        room.getGuestName() != null ? room.getGuestName() : ""
+                ));
             }
         } catch (IOException e) {
-            System.err.println("Ошибка записи в CSV: " + e.getMessage());
+            System.err.println("Error writing in CSV: " + e.getMessage());
         }
     }
 }
