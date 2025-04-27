@@ -20,7 +20,15 @@ public class Room {
         AVAILABLE, BOOKED
     }
 
-    private String guestName; // Добавлено
+    private String guestName; // добавь это поле
+
+    public String getGuestName() {
+        return guestName;
+    }
+
+    public void setGuestName(String guestName) {
+        this.guestName = guestName;
+    }
 
     public Room(int id, int floor, RoomType type, int beds, RoomStatus status, float price, String guestName) {
         this.id = id;
@@ -29,14 +37,6 @@ public class Room {
         this.beds = beds;
         this.status = status;
         this.price = price;
-        this.guestName = guestName;
-    }
-
-    public String getGuestName() {
-        return guestName;
-    }
-
-    public void setGuestName(String guestName) {
         this.guestName = guestName;
     }
 
@@ -70,13 +70,14 @@ public class Room {
 
     @Override
     public String toString() {
-            String description = switch (type) {
-                case SINGLE -> "Breakfast included.";
-                case DUO -> "Breakfast and dinner included.";
-                case LUX -> "Access to the sauna and swimming pools.";
-                case PRESIDENT -> "Access to sauna and pools.Cleaning, 3 meals a day, sauna, pool, highest room.";
-            };
-        return description;
+        String description = switch (type) {
+            case SINGLE -> "Breakfast included.";
+            case DUO -> "Breakfast and dinner included.";
+            case LUX -> "Access to the sauna and swimming pools.";
+            case PRESIDENT -> "Access to sauna and pools. Cleaning, 3 meals a day, sauna, pool, highest room.";
+        };
+        return String.format("Room ID: %d | Floor: %d | Type: %s | Beds: %d | Price: %.2f | Status: %s | Info: %s",
+                id, floor, type, beds, price, status, description);
     }
 
-    }
+}
