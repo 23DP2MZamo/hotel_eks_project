@@ -3,3 +3,4 @@ roomId,guestName,checkInDate,checkOutDate,isActive
 101,max,2025-05-10,2025-05-24,false
 101,���,2025-05-10,2025-05-14,false
 101,Max,2025-05-10,2025-05-12,false
+101,max,2001-09-11,2002-09-11,false

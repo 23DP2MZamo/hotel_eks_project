@@ -46,4 +46,4 @@ public class Reservation {
         return String.format("Room ID: %d | Guest: %s | Check-in: %s | Check-out: %s | Status: %s",
                 roomId, guestName, checkInDate, checkOutDate, isActive ? "Active" : "Cancelled");
     }
-} 
+}
