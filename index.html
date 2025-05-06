@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My System</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="logo">Hotel reservation</div>
+      <div class="hamburger">&#9776;</div>
+      <ul class="nav-links">
+        <li><a href="#hero" class="nav-link">Home</a></li>
+        <li><a href="#install" class="nav-link">Install</a></li>
+        <li><a href="#footer" class="nav-link">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="hero section-fade" id="hero">
+    <div class="slideshow-container">
+      <div class="slide active">
+        <img src="https://www.guralpremier.com/Content/assets/images/rooms/tekirova_rooms/deluxe_room.jpg" alt="Deluxe Room" loading="lazy">
+      </div>
+      <div class="slide">
+        <img src="https://images.wsj.net/im-08836224?width=1920&height=1080" alt="Luxury Room" loading="lazy">
+      </div>
+      <div class="slide">
+        <img src="https://dq5r178u4t83b.cloudfront.net/wp-content/uploads/sites/125/2020/06/15182916/Sofitel-Dubai-Wafi-Luxury-Room-Bedroom-Skyline-View-Image1_WEB.jpg" alt="Sofitel Room" loading="lazy">
+      </div>
+      <div class="slide">
+        <img src="https://niyaregency.com/niya_admin/uploads/room_image/Niya-room-Standard_Rooms-230125095850.jpg" alt="Standard Room" loading="lazy">
+      </div>
+      <button class="prev-btn">❮</button>
+      <button class="next-btn">❯</button>
+      <div class="slide-indicators">
+        <span class="indicator active"></span>
+        <span class="indicator"></span>
+        <span class="indicator"></span>
+        <span class="indicator"></span>
+      </div>
+    </div>
+    <div class="hero-content">
+      <h1>Welcome to the future!</h1>
+      <p>Your perfect hotel room booking process starts here!</p>
+    </div>
+  </section>
+
+  <section class="about section-fade" id="about">
+    <h2>About system</h2>
+    <p>Šī sistēma ļauj ērti rezervēt viesnīcu numurus. Lietotājam ir iespēja izvēlēties datumu, apskatīt pieejamos numurus un rezervēt tos dažos klikšķos.</p>
+  </section>
+
+  <section class="install-section section-fade" id="install">
+    <h2>Install the System</h2>
+    <p>Download and get started in seconds.</p>
+    <div class="buttons">
+      <a href="hotel_eks_project-master.zip" download class="btn download">Direct Download</a>
+      <a href="https://github.com/23DP2MZamo/hotel_eks_project/tree/master" target="_blank" class="btn github">View on GitHub</a>
+    </div>
+  </section>
+
+  <section class="guide section-fade" id="guide">
+    <h2>Lietotāja Ceļvedis</h2>
+    <ol>
+      <li>Lejupielādē failu nospiežot uz pogas "Direct Download" vai zip arhivu no Github, master virknē.</li>
+      <li>Atarhivē ZIP failu savā datorā.</li>
+      <li>Atver programmu saskaņā ar instrukcijām failā README.md main virknē githubā</li>
+    </ol>
+  </section>
+
+  <footer id="footer">
+    <div class="social-links">
+      <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" class="social-link"><i class="fab fa-instagram"></i></a>
+      <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" class="social-link"><i class="fab fa-facebook"></i></a>
+    </div>
+    <p>&copy; 2025 Maksims Zamovskis, Timurs Massans DP2-2</p>
+  </footer>
+
+  <button id="scrollTopBtn" title="Go to top">↑</button>
+  <script src="script.js"></script>
+</body>
+</html>
