@@ -191,11 +191,27 @@
     color: #444;
   }
   
+  .social-links-container {
+    display: flex;
+    justify-content: center;
+    gap: 4rem;
+    margin-bottom: 2rem;
+  }
+  
+  .social-links-group {
+    text-align: center;
+  }
+  
+  .social-links-group h3 {
+    color: #0074D9;
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+  }
+  
   .social-links {
     display: flex;
     justify-content: center;
     gap: 1.5rem;
-    margin-bottom: 1rem;
   }
   
   .social-link {
@@ -209,35 +225,146 @@
     transform: translateY(-3px);
   }
   
+  /* Scroll to top button */
+  #scrollTopBtn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    display: none;
+    background-color: #0074D9;
+    color: white;
+    border: none;
+    padding: 0.7rem 1rem;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 100;
+  }
+
+  #scrollTopBtn:hover {
+    background-color: #ffd700;
+    color: #001f3f;
+  }
+
+  /* Menu button */
+  .menu-button {
+    display: none;
+    cursor: pointer;
+    padding: 0.5rem 1.5rem;
+    background-color: #0074D9;
+    color: white;
+    border-radius: 25px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    position: relative;
+    z-index: 1100;
+  }
+
+  .menu-button span {
+    font-size: 1rem;
+    letter-spacing: 1px;
+  }
+
+  .menu-button:hover {
+    background-color: #ffd700;
+    color: #001f3f;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+  }
+
+  .menu-button.active {
+    background-color: #ffd700;
+    color: #001f3f;
+  }
+
   /* Responsive */
   @media (max-width: 768px) {
-    .hamburger {
+    .menu-button {
       display: block;
+      position: fixed;
+      top: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      margin-left: 150px;
+      z-index: 1100;
     }
-  
+
     .nav-links {
       display: none;
       flex-direction: column;
-      background-color: #d3d3d3;
-      padding: 1rem;
-      position: absolute;
-      top: 70px;
-      right: 0;
-      width: 200px;
+      background: #fff;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      transition: all 0.3s ease;
+      transform: translateY(-100%);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 1000;
+      padding-top: 5rem;
     }
-  
+
     .nav-links.show {
       display: flex;
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: all;
     }
-  
+
+    .nav-links li {
+      margin: 1.5rem 0;
+      text-align: center;
+      padding: 0 1rem;
+    }
+
+    .nav-links a {
+      display: block;
+      padding: 0.5rem 0;
+      transition: all 0.3s ease;
+      font-size: 1.2rem;
+    }
+
+    .nav-links a:hover {
+      color: #ffd700;
+      transform: translateX(-5px);
+    }
+
     .hero-content h1 {
       font-size: 2rem;
     }
-  
+
     .hero-content p {
       font-size: 1rem;
     }
+
+    .buttons {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .btn {
+      width: 100%;
+      max-width: 300px;
+      text-align: center;
+    }
   }
+
+  /* Additional responsive breakpoints for menu button */
+  @media (max-width: 480px) {
+    .menu-button {
+      margin-left: 100px;
+    }
+  }
+
+  @media (max-width: 375px) {
+    .menu-button {
+      margin-left: 80px;
+    }
+  }
+
   .about, .guide {
     padding: 4rem 2rem;
     text-align: center;
@@ -291,27 +418,6 @@
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
   }
 
-  /* Scroll to top button */
-  #scrollTopBtn {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    display: none;
-    background-color: #0074D9;
-    color: white;
-    border: none;
-    padding: 0.7rem 1rem;
-    border-radius: 50%;
-    font-size: 1.2rem;
-    cursor: pointer;
-    z-index: 100;
-  }
-
-  #scrollTopBtn:hover {
-    background-color: #ffd700;
-    color: #001f3f;
-  }
-
   /* Fade animation */
   .section-fade {
     opacity: 0;
@@ -322,11 +428,4 @@
   .section-fade.show {
     opacity: 1;
     transform: translateY(0);
-  }
-
-  /* Hamburger menu */
-  .hamburger {
-    display: none;
-    font-size: 1.5rem;
-    cursor: pointer;
   }

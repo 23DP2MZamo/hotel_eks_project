@@ -107,10 +107,29 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.querySelectorAll('.section-fade').forEach(sec => observer.observe(sec));
 
-    // Hamburger menu
-    const hamburger = document.querySelector('.hamburger');
+    // Menu button functionality
+    const menuButton = document.querySelector('.menu-button');
     const nav = document.querySelector('.nav-links');
-    hamburger.addEventListener('click', () => {
+
+    menuButton.addEventListener('click', (e) => {
+        e.stopPropagation();
         nav.classList.toggle('show');
+        menuButton.classList.toggle('active');
     });
-}); 
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!nav.contains(e.target) && !menuButton.contains(e.target)) {
+            nav.classList.remove('show');
+            menuButton.classList.remove('active');
+        }
+    });
+
+    // Close menu when clicking a link
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+            nav.classList.remove('show');
+            menuButton.classList.remove('active');
+        });
+    });
+});

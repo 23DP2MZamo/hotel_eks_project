@@ -10,10 +10,13 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+  <!--header-->
   <header>
     <nav class="navbar">
       <div class="logo">Hotel reservation</div>
-      <div class="hamburger">&#9776;</div>
+      <div class="menu-button">
+        <span>MENU</span>
+      </div>
       <ul class="nav-links">
         <li><a href="#hero" class="nav-link">Home</a></li>
         <li><a href="#install" class="nav-link">Install</a></li>
@@ -22,6 +25,7 @@
     </nav>
   </header>
 
+  <!--hero-->
   <section class="hero section-fade" id="hero">
     <div class="slideshow-container">
       <div class="slide active">
@@ -51,11 +55,13 @@
     </div>
   </section>
 
+  <!--about-->
   <section class="about section-fade" id="about">
     <h2>About system</h2>
     <p>Šī sistēma ļauj ērti rezervēt viesnīcu numurus. Lietotājam ir iespēja izvēlēties datumu, apskatīt pieejamos numurus un rezervēt tos dažos klikšķos.</p>
   </section>
 
+  <!--install-->
   <section class="install-section section-fade" id="install">
     <h2>Install the System</h2>
     <p>Download and get started in seconds.</p>
@@ -65,6 +71,7 @@
     </div>
   </section>
 
+  <!--guide-->
   <section class="guide section-fade" id="guide">
     <h2>Lietotāja Ceļvedis</h2>
     <ol>
@@ -74,10 +81,23 @@
     </ol>
   </section>
 
+  <!--footer-->
   <footer id="footer">
-    <div class="social-links">
-      <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" class="social-link"><i class="fab fa-instagram"></i></a>
-      <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" class="social-link"><i class="fab fa-facebook"></i></a>
+    <div class="social-links-container">
+      <div class="social-links-group">
+        <h3>Maksims</h3>
+        <div class="social-links">
+          <a href="https://www.instagram.com/fir3wo4k/profilecard/?igsh=czBocGR5eGY1bTd2" target="_blank" rel="noopener noreferrer" class="social-link"><i class="fab fa-instagram"></i></a>
+          <a href="#" onclick="alert('Maksims nav Facebook konta'); return false;" class="social-link"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
+      <div class="social-links-group">
+        <h3>Timurs</h3>
+        <div class="social-links">
+          <a href="https://www.instagram.com/policijant?igsh=eHpyeW1tN2xxNmFr&utm_source=qr" target="_blank" rel="noopener noreferrer" class="social-link"><i class="fab fa-instagram"></i></a>
+          <a href="#" onclick="alert('Timurs nav Facebook konta'); return false;" class="social-link"><i class="fab fa-facebook"></i></a>
+        </div>
+      </div>
     </div>
     <p>&copy; 2025 Maksims Zamovskis, Timurs Massans DP2-2</p>
   </footer>
