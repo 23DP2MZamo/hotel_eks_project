@@ -1,14 +1,18 @@
 package org.example.service;
 
+import org.example.database.DatabaseManager;
 import org.example.model.Room;
+import org.example.model.Reservation;
 import java.util.ArrayList;
 import java.util.List;
 
 public class RoomManager {
     private List<Room> rooms;
+    private DatabaseManager databaseManager;
 
-    public RoomManager() {
-        this.rooms = new ArrayList<>();
+    public RoomManager(DatabaseManager databaseManager) {
+        this.databaseManager = databaseManager;
+        this.rooms = databaseManager.loadRooms();
     }
 
     public void addRoom(Room room) {
@@ -54,4 +58,26 @@ public class RoomManager {
     public int getTotalRoomCount() {
         return rooms.size();
     }
-} 
+
+    public void syncRoomStatusWithReservations(List<Reservation> reservations) {
+        // First, mark all rooms as available
+        for (Room room : rooms) {
+            room.setAvailable(true);
+            room.setGuestName(null);
+        }
+
+        // Then, update room status based on active reservations
+        for (Reservation reservation : reservations) {
+            if (!reservation.isCancelled()) {
+                Room room = getRoomByNumber(reservation.getRoomNumber());
+                if (room != null) {
+                    room.setAvailable(false);
+                    room.setGuestName(reservation.getGuestName());
+                }
+            }
+        }
+        
+        // Save the updated room status
+        databaseManager.saveRooms(rooms);
+    }
+}

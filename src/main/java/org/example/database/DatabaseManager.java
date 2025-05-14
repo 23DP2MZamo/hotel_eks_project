@@ -3,61 +3,33 @@ package org.example.database;
 import org.example.model.Room;
 import org.example.model.Reservation;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseManager {
-    private static final String ROOMS_FILE = "src/main/resources/rooms.csv";
-    private static final String RESERVATIONS_FILE = "src/main/resources/reservations.csv";
+    private static final String ROOMS_FILE = "main/resources/rooms.csv";
+    private static final String RESERVATIONS_FILE = "main/resources/reservations.csv";
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-    private void seedRooms() {
-        List<Room> rooms = new ArrayList<>();
-        
-        // Standard Rooms
-        rooms.add(new Room(101, 1, "Standard", 1, 100.0));
-        rooms.add(new Room(102, 1, "Standard", 1, 100.0));
-        rooms.add(new Room(103, 1, "Standard", 2, 150.0));
-        rooms.add(new Room(104, 1, "Standard", 2, 150.0));
-        
-        // Deluxe Rooms
-        rooms.add(new Room(201, 2, "Deluxe", 1, 200.0));
-        rooms.add(new Room(202, 2, "Deluxe", 1, 200.0));
-        rooms.add(new Room(203, 2, "Deluxe", 2, 250.0));
-        rooms.add(new Room(204, 2, "Deluxe", 2, 250.0));
-        
-        // Suite Rooms
-        rooms.add(new Room(301, 3, "Suite", 2, 300.0));
-        rooms.add(new Room(302, 3, "Suite", 2, 300.0));
-        rooms.add(new Room(303, 3, "Suite", 3, 400.0));
-        rooms.add(new Room(304, 3, "Suite", 3, 400.0));
-        
-        // Presidential Suite
-        rooms.add(new Room(401, 4, "Presidential Suite", 4, 1000.0));
-        
-        // Create resources directory if it doesn't exist
-        File resourcesDir = new File("src/main/resources");
-        if (!resourcesDir.exists()) {
-            resourcesDir.mkdirs();
-        }
-        
-        saveRooms(rooms);
-    }
-
     public void saveRooms(List<Room> rooms) {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(ROOMS_FILE))) {
-            writer.println("roomNumber,floor,type,beds,price,available,guestName");
+        try (PrintWriter writer = new PrintWriter(new OutputStreamWriter(
+                new FileOutputStream(ROOMS_FILE), StandardCharsets.UTF_8))) {
+            writer.println("id,floor,type,beds,status,price,guestName");
             for (Room room : rooms) {
-                writer.printf("%d,%d,%s,%d,%.2f,%b,%s%n",
-                    room.getRoomNumber(),
-                    room.getFloor(),
-                    room.getType(),
-                    room.getBeds(),
-                    room.getPrice(),
-                    room.isAvailable(),
-                    room.getGuestName() != null ? room.getGuestName() : "");
+                String status = room.isAvailable() ? "AVAILABLE" : "OCCUPIED";
+                String price = String.format("%.2f", room.getPrice()).replace('.', ',');
+                String guestName = room.getGuestName() != null ? room.getGuestName() : "00";
+                writer.printf("%d,%d,%s,%d,%s,%s,%s%n",
+                        room.getRoomNumber(),
+                        room.getFloor(),
+                        room.getType(),
+                        room.getBeds(),
+                        status,
+                        price,
+                        guestName);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -67,47 +39,92 @@ public class DatabaseManager {
     public List<Room> loadRooms() {
         List<Room> rooms = new ArrayList<>();
         File file = new File(ROOMS_FILE);
-        
+
         if (!file.exists()) {
             seedRooms();
+            return loadRooms(); // Reload after seeding
         }
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(ROOMS_FILE))) {
-            String line = reader.readLine(); // Skip header
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+                new FileInputStream(ROOMS_FILE), StandardCharsets.UTF_8))) {
+            String line = reader.readLine(); // skip header
+
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
                 if (parts.length >= 7) {
-                    Room room = new Room(
-                        Integer.parseInt(parts[0]),
-                        Integer.parseInt(parts[1]),
-                        parts[2],
-                        Integer.parseInt(parts[3]),
-                        Double.parseDouble(parts[4])
-                    );
-                    room.setAvailable(Boolean.parseBoolean(parts[5]));
-                    if (!parts[6].isEmpty()) {
-                        room.setGuestName(parts[6]);
-                    }
+                    int id = Integer.parseInt(parts[0].trim());
+                    int floor = Integer.parseInt(parts[1].trim());
+                    String type = parts[2].trim();
+                    int beds = Integer.parseInt(parts[3].trim());
+                    boolean available = parts[4].trim().equalsIgnoreCase("AVAILABLE");
+                    double price = Double.parseDouble(parts[5].trim().replace(",", "."));
+                    String guestName = parts[6].trim();
+                    guestName = guestName.equals("00") ? null : guestName;
+
+                    Room room = new Room(id, floor, type, beds, price);
+                    room.setAvailable(available);
+                    room.setGuestName(guestName);
                     rooms.add(room);
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return rooms;
     }
 
+    public void seedRooms() {
+        List<Room> rooms = new ArrayList<>();
+
+        // Single rooms (1-30)
+        for (int i = 1; i <= 30; i++) {
+            int floor = (i - 1) / 10 + 1;
+            Room room = new Room(i, floor, "SINGLE", 1, 20.00);
+            room.setAvailable(true);
+            room.setGuestName(null);
+            rooms.add(room);
+        }
+
+        // Duo rooms (31-50)
+        for (int i = 31; i <= 50; i++) {
+            int floor = (i - 1) / 10 + 1;
+            Room room = new Room(i, floor, "DUO", 2, 30.00);
+            room.setAvailable(true);
+            room.setGuestName(null);
+            rooms.add(room);
+        }
+
+        // Lux rooms (51-100)
+        for (int i = 51; i <= 100; i++) {
+            int floor = (i - 1) / 10 + 1;
+            Room room = new Room(i, floor, "LUX", 3, 40.00);
+            room.setAvailable(true);
+            room.setGuestName(null);
+            rooms.add(room);
+        }
+
+        // President suite (101)
+        Room president = new Room(101, 11, "PRESIDENT", 5, 1000.00);
+        president.setAvailable(true);
+        president.setGuestName(null);
+        rooms.add(president);
+
+        saveRooms(rooms);
+    }
+
     public void saveReservations(List<Reservation> reservations) {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(RESERVATIONS_FILE))) {
+        try (PrintWriter writer = new PrintWriter(new OutputStreamWriter(
+                new FileOutputStream(RESERVATIONS_FILE), StandardCharsets.UTF_8))) {
             writer.println("id,roomNumber,guestName,checkInDate,checkOutDate,cancelled");
             for (Reservation reservation : reservations) {
                 writer.printf("%d,%d,%s,%s,%s,%b%n",
-                    reservation.getReservationId(),
-                    reservation.getRoomNumber(),
-                    reservation.getGuestName(),
-                    reservation.getCheckInDate().format(DATE_FORMATTER),
-                    reservation.getCheckOutDate().format(DATE_FORMATTER),
-                    reservation.isCancelled());
+                        reservation.getReservationId(),
+                        reservation.getRoomNumber(),
+                        reservation.getGuestName(),
+                        reservation.getCheckInDate().format(DATE_FORMATTER),
+                        reservation.getCheckOutDate().format(DATE_FORMATTER),
+                        reservation.isCancelled());
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -116,17 +133,24 @@ public class DatabaseManager {
 
     public List<Reservation> loadReservations() {
         List<Reservation> reservations = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(RESERVATIONS_FILE))) {
-            String line = reader.readLine(); // Skip header
+        File file = new File(RESERVATIONS_FILE);
+        if (!file.exists()) {
+            return reservations;
+        }
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+                new FileInputStream(RESERVATIONS_FILE), StandardCharsets.UTF_8))) {
+            String line = reader.readLine();
+
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
                 if (parts.length >= 6) {
                     Reservation reservation = new Reservation(
-                        Integer.parseInt(parts[0]),
-                        Integer.parseInt(parts[1]),
-                        parts[2],
-                        LocalDate.parse(parts[3], DATE_FORMATTER),
-                        LocalDate.parse(parts[4], DATE_FORMATTER)
+                            Integer.parseInt(parts[0]),
+                            Integer.parseInt(parts[1]),
+                            parts[2],
+                            LocalDate.parse(parts[3], DATE_FORMATTER),
+                            LocalDate.parse(parts[4], DATE_FORMATTER)
                     );
                     reservation.setCancelled(Boolean.parseBoolean(parts[5]));
                     reservations.add(reservation);
@@ -135,6 +159,7 @@ public class DatabaseManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return reservations;
     }
-} 
+}

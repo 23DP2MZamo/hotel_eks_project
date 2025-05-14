@@ -1,6 +1,7 @@
 package org.example.service;
 
 import org.example.model.Reservation;
+import org.example.database.DatabaseManager;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,8 +9,10 @@ import java.util.List;
 public class ReservationManager {
     private List<Reservation> reservations;
     private int nextReservationId;
+    private final DatabaseManager databaseManager;
 
-    public ReservationManager() {
+    public ReservationManager(DatabaseManager databaseManager) {
+        this.databaseManager = databaseManager;
         this.reservations = new ArrayList<>();
         this.nextReservationId = 1;
     }
@@ -17,6 +20,7 @@ public class ReservationManager {
     public Reservation createReservation(int roomNumber, String guestName, LocalDate checkInDate, LocalDate checkOutDate) {
         Reservation reservation = new Reservation(nextReservationId++, roomNumber, guestName, checkInDate, checkOutDate);
         reservations.add(reservation);
+        saveReservations();
         return reservation;
     }
 
@@ -24,6 +28,7 @@ public class ReservationManager {
         for (Reservation reservation : reservations) {
             if (reservation.getReservationId() == reservationId) {
                 reservation.setCancelled(true);
+                saveReservations();
                 return true;
             }
         }
@@ -67,5 +72,19 @@ public class ReservationManager {
 
     public int getTotalReservationCount() {
         return reservations.size();
+    }
+
+    public void saveReservations() {
+        databaseManager.saveReservations(reservations);
+    }
+
+    public void loadReservations() {
+        reservations.clear();
+        reservations.addAll(databaseManager.loadReservations());
+        // Update nextReservationId based on existing reservations
+        nextReservationId = reservations.stream()
+                .mapToInt(Reservation::getReservationId)
+                .max()
+                .orElse(0) + 1;
     }
 } 
