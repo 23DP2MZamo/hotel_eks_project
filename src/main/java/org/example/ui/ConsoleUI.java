@@ -105,6 +105,156 @@ public class ConsoleUI {
                     guest);
         }
         printLine();
+
+        // Add search options
+        System.out.println(ConsoleColors.YELLOW + "\nSearch Options:" + ConsoleColors.RESET);
+        System.out.println("1. Search by Beds Count");
+        System.out.println("2. Search by Room Type");
+        System.out.println("3. Search by Floor");
+        System.out.println("4. Search by Price Range");
+        System.out.println("5. Return to Main Menu");
+        printLine();
+        System.out.print("\nEnter your choice (1-5): ");
+
+        String choice = scanner.nextLine().trim();
+        switch (choice) {
+            case "1":
+                searchByBeds();
+                break;
+            case "2":
+                searchByType();
+                break;
+            case "3":
+                searchByFloor();
+                break;
+            case "4":
+                searchByPrice();
+                break;
+            case "5":
+                return;
+            default:
+                System.out.println(ConsoleColors.RED + "\nInvalid choice. Returning to main menu." + ConsoleColors.RESET);
+        }
+    }
+
+    private void searchByBeds() {
+        printTitle("Search by Beds Count");
+        System.out.print("Enter number of beds (1-5): ");
+        try {
+            int beds = Integer.parseInt(scanner.nextLine().trim());
+            if (beds < 1 || beds > 5) {
+                System.out.println(ConsoleColors.RED + "Invalid number of beds. Must be between 1 and 5." + ConsoleColors.RESET);
+                return;
+            }
+
+            List<Room> filteredRooms = roomManager.getAllRooms().stream()
+                    .filter(room -> room.getBeds() == beds)
+                    .toList();
+
+            displayFilteredRooms(filteredRooms, "Rooms with " + beds + " bed(s)");
+        } catch (NumberFormatException e) {
+            System.out.println(ConsoleColors.RED + "Invalid input. Please enter a number." + ConsoleColors.RESET);
+        }
+    }
+
+    private void searchByType() {
+        printTitle("Search by Room Type");
+        System.out.println("Available room types:");
+        System.out.println("1. SINGLE");
+        System.out.println("2. DUO");
+        System.out.println("3. LUX");
+        System.out.println("4. PRESIDENT");
+        printLine();
+        System.out.print("Enter room type (1-4): ");
+
+        String choice = scanner.nextLine().trim();
+        String type;
+        switch (choice) {
+            case "1": type = "SINGLE"; break;
+            case "2": type = "DUO"; break;
+            case "3": type = "LUX"; break;
+            case "4": type = "PRESIDENT"; break;
+            default:
+                System.out.println(ConsoleColors.RED + "Invalid choice." + ConsoleColors.RESET);
+                return;
+        }
+
+        List<Room> filteredRooms = roomManager.getAllRooms().stream()
+                .filter(room -> room.getType().equals(type))
+                .toList();
+
+        displayFilteredRooms(filteredRooms, type + " Rooms");
+    }
+
+    private void searchByFloor() {
+        printTitle("Search by Floor");
+        System.out.print("Enter floor number (1-11): ");
+        try {
+            int floor = Integer.parseInt(scanner.nextLine().trim());
+            if (floor < 1 || floor > 11) {
+                System.out.println(ConsoleColors.RED + "Invalid floor number. Must be between 1 and 11." + ConsoleColors.RESET);
+                return;
+            }
+
+            List<Room> filteredRooms = roomManager.getAllRooms().stream()
+                    .filter(room -> room.getFloor() == floor)
+                    .toList();
+
+            displayFilteredRooms(filteredRooms, "Rooms on Floor " + floor);
+        } catch (NumberFormatException e) {
+            System.out.println(ConsoleColors.RED + "Invalid input. Please enter a number." + ConsoleColors.RESET);
+        }
+    }
+
+    private void searchByPrice() {
+        printTitle("Search by Price Range");
+        try {
+            System.out.print("Enter minimum price: $");
+            double minPrice = Double.parseDouble(scanner.nextLine().trim());
+            System.out.print("Enter maximum price: $");
+            double maxPrice = Double.parseDouble(scanner.nextLine().trim());
+
+            if (minPrice < 0 || maxPrice < minPrice) {
+                System.out.println(ConsoleColors.RED + "Invalid price range." + ConsoleColors.RESET);
+                return;
+            }
+
+            List<Room> filteredRooms = roomManager.getAllRooms().stream()
+                    .filter(room -> room.getPrice() >= minPrice && room.getPrice() <= maxPrice)
+                    .toList();
+
+            displayFilteredRooms(filteredRooms, 
+                String.format("Rooms between $%.2f and $%.2f", minPrice, maxPrice));
+        } catch (NumberFormatException e) {
+            System.out.println(ConsoleColors.RED + "Invalid input. Please enter valid numbers." + ConsoleColors.RESET);
+        }
+    }
+
+    private void displayFilteredRooms(List<Room> rooms, String title) {
+        if (rooms.isEmpty()) {
+            System.out.println(ConsoleColors.YELLOW + "\nNo rooms found matching your criteria." + ConsoleColors.RESET);
+            return;
+        }
+
+        printTitle(title);
+        System.out.println(ConsoleColors.CYAN + "Room | Floor | Type    | Beds | Status    | Price  | Guest" + ConsoleColors.RESET);
+        printLine();
+
+        for (Room room : rooms) {
+            String status = room.isAvailable() ? 
+                ConsoleColors.GREEN + "Available" + ConsoleColors.RESET : 
+                ConsoleColors.RED + "Booked" + ConsoleColors.RESET;
+            String guest = room.getGuestName() != null ? room.getGuestName() : "-";
+            System.out.printf("%-4d | %-5d | %-8s | %-4d | %-9s | $%-5.2f | %s%n",
+                    room.getRoomNumber(),
+                    room.getFloor(),
+                    room.getType(),
+                    room.getBeds(),
+                    status,
+                    room.getPrice(),
+                    guest);
+        }
+        printLine();
     }
 
     private void makeReservation() {
